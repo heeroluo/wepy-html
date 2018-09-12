@@ -18,7 +18,7 @@ gulp.task('copy-others', () => {
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build-js', 'copy-others'], () => {
 	gulp.watch(jsFiles, ['build-js']);
 	gulp.watch(otherFiles, ['copy-others']);
 });
