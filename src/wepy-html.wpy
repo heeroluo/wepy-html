@@ -1,0 +1,215 @@
+<template lang="wxml"> 
+	<!-- 图片模板 -->
+	<template name="wepyhtml-img">
+		<image class="{{ elem.attrs['class'] }} wepyhtml-tag-img" style="{{ elem.attrs.style }}" data-nodeid="{{ elem.nodeId }}" mode="widthFix" src="{{ elem.attrs.src }}" data-src="{{ elem.attrs['data-src'] || elem.attrs.src }}" @tap="imgTap" lazy-load="true" />
+	</template>
+
+	<!-- 视频模板（分图片占位模式和视频模式） -->
+	<template name="wepyhtml-video">
+		<block>
+			<view wx:if="{{ imgInsteadOfVideo }}" class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" data-nodeid="{{ elem.nodeId }}" @tap="videoTap">
+				<image class="wepyhtml-tag-img wepyhtml-tag-video__poster" mode="widthFix" src="{{ elem.attrs.poster }}" lazy-load="true" />
+				<image class="wepyhtml-tag-img wepyhtml-tag-video__play" src="./imgs/icon-play.png" />
+				<video style="display: none;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
+			</view>
+			<video class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" wx:else src="{{ elem.attrs.src }}" poster="{{ elem.attrs.poster }}" data-nodeid="{{ elem.nodeId }}"></video>
+		</block>
+	</template>
+
+	<!-- 音频模板 -->
+	<template name="wepyhtml-audio">
+		<audio class="{{ elem.attrs['class'] }} wepyhtml-tag-audio" data-nodeid="{{ elem.nodeId }}" src="{{ attrs.src }}" controls="true"></audio>
+	</template>
+
+	<!-- 换行 -->
+	<template name="wepyhtml-br">
+		<text data-nodeid="{{ elem.nodeId }}">\n</text>
+	</template>
+
+	<!-- wepyhtml-repeat start -->
+	<template name="wepyhtml-0">
+		{{ thisIsMe }}
+		<block wx:if="{{ content }}" wx:for="{{ content }}" wx:for-item="item" wx:key="nodeId">
+			<block wx:if="{{ item.type === 'node' }}">
+				<template is="wepyhtml-img"  wx:if="{{ item.name === 'img' }}" data="{{ elem: item }}"></template>
+				<template is="wepyhtml-video" wx:elif="{{ item.name === 'video' }}" data="{{ elem: item, imgInsteadOfVideo: imgInsteadOfVideo }}"></template>
+				<template is="wepyhtml-audio" wx:elif="{{ item.name === 'audio' }}" data="{{ elem: item }}"></template>
+				<template is="wepyhtml-br" wx:elif="{{ item.name === 'br' }}"></template>
+				<view wx:elif="{{ item.name === 'a' }}" class="wepyhtml-tag-{{ item.name }} wepyhtml-display-inline" style="{{ item.attrs.style }}" data-nodeid="{{ item.nodeId }}" data-href="{{ item.attrs.href }}" @tap="hyperlinkTap">
+					<!-- next template -->
+				</view>
+				<view wx:else class="wepyhtml-tag-{{ item.name }} wepyhtml-display-{{ item.display }}" style="{{ item.attrs.style }}" data-nodeid="{{ item.nodeId }}">
+					<!-- next template -->
+				</view>
+			</block>
+			<text selectable="true" wx:else>{{ item.text }}</text>
+		</block>
+	</template>
+	<!-- wepyhtml-repeat end -->
+
+	<template is="wepyhtml-0" wx:if="{{ content }}" data="{{ content: content, imgInsteadOfVideo: imgInsteadOfVideo }}"></template>
+</template>
+
+<style>
+.wepyhtml-display-inline {
+	display: inline;
+}
+.wepyhtml-display-block {
+	display: block;
+}
+.wepyhtml-display-noscript,
+.wepyhtml-display-script,
+.wepyhtml-display-style {
+	display: none;
+}
+
+.wepyhtml-tag-h1,
+.wepyhtml-tag-h2,
+.wepyhtml-tag-h3,
+.wepyhtml-tag-h4,
+.wepyhtml-tag-h5,
+.wepyhtml-tag-h6,
+.wepyhtml-tag-strong,
+.wepyhtml-tag-b {
+	font-weight: bold;
+}
+
+.wepyhtml-tag-em,
+.wepyhtml-tag-i {
+	font-style: italic;
+}
+
+.wepyhtml-tag-img {
+	width: 100%;
+	border: none;
+	vertical-align: top;
+}
+
+.wepyhtml-tag-p,
+.wepyhtml-tag-ul,
+.wepyhtml-tag-ol {
+	margin: 0.5em 0;
+}
+
+.wepyhtml-tag-table {
+	width: 100%;
+}
+.wepyhtml-tag-tr {
+	display: flex;
+}
+.wepyhtml-tag-th,
+.wepyhtml-tag-td {
+	flex: 1;
+	padding: 0.2em;
+	border: 2rpx solid;
+}
+.wepyhtml-tag-td:first-child,
+.wepyhtml-tag-th:first-child {
+	border-right: none;
+}
+.wepyhtml-tag-tr:first-child .wepyhtml-tag-td,
+.wepyhtml-tag-tr:first-child .wepyhtml-tag-th {
+	border-bottom: none;
+}
+.wepyhtml-tag-th {
+	text-align: center;
+	font-weight: bold;
+}
+
+.wepyhtml-tag-video {
+	width: 100%;
+	position: relative;
+	background: #000;
+}
+.wepyhtml-tag-video__play {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 110rpx;
+	height: 110rpx;
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import { Document } from './html-json';
+import { parse as parseHTML } from './html-parser';
+
+export default class WepyHTML extends wepy.component {
+	data = {
+		thisIsMe: '',
+		content: null,
+		imgInsteadOfVideo: false,
+		onHyperlinkTap: null,
+		previewImgs: []
+	}
+
+	updateContent(content, options) {
+		options = options || [];
+		this.imgInsteadOfVideo = options.imgInsteadOfVideo;
+		this.onHyperlinkTap = options.onHyperlinkTap;
+
+		if (Array.isArray(content)) {
+			content = content.slice();
+		} else if (typeof content === 'string' && content) {
+			content = parseHTML(content, new Document({
+				onNodeCreate: (name, attrs) => {
+					if (options.onNodeCreate) {
+						options.onNodeCreate.call(this, name, attrs);
+					}
+				}
+			})).nodes();
+		}
+
+		this.content = content || [];
+		this.$apply();
+	}
+
+	methods = {
+		// 点击封面图，播放视频
+		videoTap(e) {
+			const nodeId = e.currentTarget.dataset.nodeid;
+			const context = wepy.createVideoContext('wepyhtml-video-' + nodeId);
+			context.play();
+			// 在安卓微信下，如果视频不可见，则调用play()也无法播放
+			// 需要再调用全屏方法
+			if (wx.getSystemInfoSync().platform === 'android') {
+				context.requestFullScreen();
+			}
+		},
+		// 视频层级较高，为防止遮挡其他特殊定位元素，造成界面异常，
+		// 强制全屏播放
+		videoPlay(e) {
+			wepy.createVideoContext(e.currentTarget.id).requestFullScreen();
+		},
+		// 退出全屏则暂停
+		videoFullscreenChange(e) {
+			if (!e.detail.fullScreen) {
+				wepy.createVideoContext(e.currentTarget.id).pause();
+			}
+		},
+		// 播放出错时退出全屏
+		videoError(e) {
+			wepy.createVideoContext(e.currentTarget.id).exitFullScreen();
+		},
+
+		// 点击小图看大图
+		imgTap(e) {
+			wepy.previewImage({
+				current: e.currentTarget.dataset.src,
+				urls: this.previewImgs
+			});
+		},
+
+		// 点击链接
+		hyperlinkTap(e) {
+			if (this.onHyperlinkTap) {
+				this.onHyperlinkTap.call(global, {
+					href: e.currentTarget.dataset.href
+				});
+			}
+		}
+	}
+}
+</script>
