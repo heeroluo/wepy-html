@@ -8,15 +8,56 @@
 
 ## 安装
 
-在小程序项目目录下运行安装：
+在小程序项目目录下安装本组件：
 
 ``` bash
-npm install wepy-html
+npm install wepy-html --save
+```
+
+此外，还要安装一个构建插件：
+
+``` bash
+npm install wepy-plugin-replace --save-dev
 ```
 
 ## 调用
 
-在页面（page.wpy）中调用组件的Demo：
+首先要在「wepy.config.js」中增加构建步骤（开发和生产都要加）：
+
+``` javascript
+{
+	plugins: {
+		replace: {
+			filter: /\.wxml$/,
+			config: {
+				find: /<\!-- wepyhtml-repeat start -->([\W\w]+?)<\!-- wepyhtml-repeat end -->/,
+				replace(match, tpl) {
+					let result = '';
+					let prefix = '';
+
+					tpl = tpl.replace(/\{\{\s*(\$.*?\$)thisIsMe\s*\}\}/, (match, p) => {
+						prefix = p;
+						return '';
+					});
+
+					for (let i = 0; i <= 20; i++) {
+						result += '\n' + tpl
+							.replace('wepyhtml-0', 'wepyhtml-' + i)
+							.replace(/<\!-- next template -->/g, () => {
+								return i === 20 ?
+									'' :
+									`<template is="wepyhtml-${ i + 1 }" wx:if="{{ item.children }}" data="{{ ${ prefix }content: item.children, ${ prefix }imgInsteadOfVideo: ${ prefix }imgInsteadOfVideo }}"></template>`;
+							});
+					}
+					return result;
+				}
+			}
+		}
+	}
+}
+```
+
+然后就可以在页面（page.wpy）中调用组件了，例如：
 
 ``` html
 <template lang="wxml">
