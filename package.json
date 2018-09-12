@@ -1,0 +1,36 @@
+{
+  "name": "wepy-html",
+  "version": "0.1.0",
+  "description": "Rich text component for WePY applications",
+  "scripts": {
+    "start": "gulp watch",
+    "build": "gulp"
+  },
+  "main": "dist/wepy-html.wpy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beiliao-mobile/wepy-html.git"
+  },
+  "keywords": [
+    "html",
+    "parse",
+    "rich text"
+  ],
+  "author": {
+    "name": "Heero.Luo",
+    "email": "heeroluo@126.com",
+    "url": "http://heeroluo.net/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/beiliao-mobile/wepy-html/issues"
+  },
+  "homepage": "https://github.com/beiliao-mobile/wepy-html#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-copy": "^1.1.0"
+  }
+}
