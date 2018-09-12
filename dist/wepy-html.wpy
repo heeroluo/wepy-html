@@ -9,7 +9,7 @@
 		<block>
 			<view wx:if="{{ imgInsteadOfVideo }}" class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" data-nodeid="{{ elem.nodeId }}" @tap="videoTap">
 				<image class="wepyhtml-tag-img wepyhtml-tag-video__poster" mode="widthFix" src="{{ elem.attrs.poster }}" lazy-load="true" />
-				<view class="wepyhtml-tag-img wepyhtml-tag-video__play"></view>
+				<image class="wepyhtml-tag-img wepyhtml-tag-video__play" src="./imgs/icon-play.png" />
 				<video style="display: none;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
 			</view>
 			<video class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" wx:else src="{{ elem.attrs.src }}" poster="{{ elem.attrs.poster }}" data-nodeid="{{ elem.nodeId }}"></video>
@@ -57,6 +57,7 @@
 .wepyhtml-display-block {
 	display: block;
 }
+.wepyhtml-display-noscript,
 .wepyhtml-display-script,
 .wepyhtml-display-style {
 	display: none;
@@ -127,8 +128,6 @@
 	transform: translate(-50%, -50%);
 	width: 110rpx;
 	height: 110rpx;
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAArlBMVEUAAAAAAAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD39/cODg7g4OAHBwfr6+vDw8OCgoJra2sYGBgAAADPz8+tra2enp4zMzMnJyf8/Pzl5eXX19e6urqRkZFzc3NeXl5UVFRJSUk/Pz8hISHwkFV5AAAAOnRSTlOzALOwpmASoJ2XixYMrJSJgHtuamNcSkNAOTMoHhoOCLOzs7Ozs7Ozsyezs7Ozs7Ozs7Ozs7Ozs7Oz+l5cWgAAAkZJREFUaN681GdWAjEYheELKZMp9N4VOyL2tv+NiSMakDJfMgnPBt5z7o+LAlEy6IhaVFacMa7KUU10BkmBiBSR3brCDqrelW4io1aIA8LWKG8kaUfIFLWTHBHZLIGk1JSWkbjBQMYasUVkIhiMMDExjfQCGAt6RhFZhZWqpEf6HJZ4nxoRyEGQIuMKcqmMsyNxiJzCOCsyDJBbMDwcueFwgN8cigw5nODD/ZE4gCNBvC8yDuFMON4TqcChyu6IgFNiV6QPx/rbEcnhGJdbkSqcq/6P9OBBbzMyCeBBMNmICHgh1iMxgxcsXos04ElDRySDJ0z+RZrwpvkbSUrwppSsIm141F5FIngU/URG8GqURlrIdnU+vTyFlVYaCZHtpFgsnr+cwUL4HZEgKKYermwychnpEiOp6SuMdZeROjmSenyDofoyomgRbfYOI6qABNSIdvEBEwkGBhHt6Q50A3SMItrtAlQdCMOINv8EjUDNNKLdz69BUUNkHtFOnimZCGWriM4QLq0MZRfRpgtkUOCWEe0CGTiYbUTLGowdJXKcuVTeyOyrWju2AhiEYSBaZZI0aTJA9l8sI2Bj3sfMAAhJp2d48OQKk8dYk5UvJithgSzo8DUv9W9c6smnRb5fYSSIJcqbuztv7ohNFYabRAcSgkScI8GURGxRFpDaQxQ4pIoSpRqpB0XRKSpbUj6LGl0AAYE2CKQRuEmAM4EA98PMNVi2B2Auo/JO0L8yX+g2xJiclPQcx2RnPr0HS8Hp1SkjsgVzuB/bACu4eZ7lqgAAAABJRU5ErkJggg==);
-	background-size: 100% 100%;
 }
 </style>
 
