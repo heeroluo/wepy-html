@@ -176,7 +176,7 @@ export default class WepyHTML extends wepy.component {
 			context.play();
 			// 在安卓微信下，如果视频不可见，则调用play()也无法播放
 			// 需要再调用全屏方法
-			if (wx.getSystemInfoSync().platform === 'android') {
+			if (wepy.getSystemInfoSync().platform === 'android') {
 				context.requestFullScreen();
 			}
 		},
