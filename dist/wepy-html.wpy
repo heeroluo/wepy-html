@@ -18,7 +18,7 @@
 
 	<!-- 音频模板 -->
 	<template name="wepyhtml-audio">
-		<audio class="{{ elem.attrs['class'] }} wepyhtml-tag-audio" data-nodeid="{{ elem.nodeId }}" src="{{ attrs.src }}" controls="true"></audio>
+		<audio class="{{ elem.attrs['class'] }} wepyhtml-tag-audio" data-nodeid="{{ elem.nodeId }}" src="{{ elem.attrs.src }}" controls="true"></audio>
 	</template>
 
 	<!-- 换行 -->
