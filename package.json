@@ -1,6 +1,6 @@
 {
   "name": "wepy-html",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Rich text component for WePY applications",
   "scripts": {
     "start": "gulp watch",
