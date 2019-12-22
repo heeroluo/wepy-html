@@ -10,9 +10,9 @@
 			<view wx:if="{{ imgInsteadOfVideo }}" class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" data-nodeid="{{ elem.nodeId }}" @tap="videoTap">
 				<image class="wepyhtml-tag-img wepyhtml-tag-video__poster" mode="widthFix" src="{{ elem.attrs.poster }}" lazy-load="true" />
 				<view class="wepyhtml-tag-video__play"></view>
-				<video style="display: none;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
+				<video style="display: none;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" object-fit="{{ elem.attrs['object-fit'] }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
 			</view>
-			<video class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" wx:else src="{{ elem.attrs.src }}" poster="{{ elem.attrs.poster }}" data-nodeid="{{ elem.nodeId }}"></video>
+			<video wx:else class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" src="{{ elem.attrs.src }}" poster="{{ elem.attrs.poster }}" object-fit="{{ elem.attrs['object-fit'] }}" data-nodeid="{{ elem.nodeId }}"></video>
 		</block>
 	</template>
 

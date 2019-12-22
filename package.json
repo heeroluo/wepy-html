@@ -1,6 +1,6 @@
 {
   "name": "wepy-html",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Rich text component for WePY applications",
   "scripts": {
     "start": "gulp watch",
@@ -9,7 +9,7 @@
   "main": "dist/wepy-html.wpy",
   "repository": {
     "type": "git",
-    "url": "https://github.com/beiliao-mobile/wepy-html.git"
+    "url": "https://github.com/heeroluo/wepy-html.git"
   },
   "keywords": [
     "html",
@@ -19,18 +19,19 @@
   "author": {
     "name": "Heero.Luo",
     "email": "heeroluo@126.com",
-    "url": "http://heeroluo.net/"
+    "url": "https://mrluo.life/"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/beiliao-mobile/wepy-html/issues"
+    "url": "https://github.com/heeroluo/wepy-html/issues"
   },
-  "homepage": "https://github.com/beiliao-mobile/wepy-html#readme",
+  "homepage": "https://github.com/heeroluo/wepy-html#readme",
   "devDependencies": {
-    "@babel/core": "^7.0.1",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
-    "gulp-copy": "^1.1.0"
+    "gulp-copy": "^1.1.0",
+    "natives": "^1.1.6"
   }
 }
