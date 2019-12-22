@@ -10,7 +10,7 @@
 			<view wx:if="{{ imgInsteadOfVideo }}" class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" data-nodeid="{{ elem.nodeId }}" @tap="videoTap">
 				<image class="wepyhtml-tag-img wepyhtml-tag-video__poster" mode="widthFix" src="{{ elem.attrs.poster }}" lazy-load="true" />
 				<view class="wepyhtml-tag-video__play"></view>
-				<video style="display: none;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" object-fit="{{ elem.attrs['object-fit'] }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
+				<video style="width: 10rpx; height: 10rpx; position: absolute; left: -1000rpx;" src="{{ elem.attrs.src }}" id="wepyhtml-video-{{ elem.nodeId }}" object-fit="{{ elem.attrs['object-fit'] }}" @fullscreenchange="videoFullscreenChange" @play="videoPlay"></video>
 			</view>
 			<video wx:else class="{{ elem.attrs['class'] }} wepyhtml-tag-video" style="{{ elem.attrs.style }}" src="{{ elem.attrs.src }}" poster="{{ elem.attrs.poster }}" object-fit="{{ elem.attrs['object-fit'] }}" data-nodeid="{{ elem.nodeId }}"></video>
 		</block>
@@ -18,7 +18,7 @@
 
 	<!-- 音频模板 -->
 	<template name="wepyhtml-audio">
-		<audio class="{{ elem.attrs['class'] }} wepyhtml-tag-audio" data-nodeid="{{ elem.nodeId }}" src="{{ attrs.src }}" controls="true"></audio>
+		<audio class="{{ elem.attrs['class'] }} wepyhtml-tag-audio" data-nodeid="{{ elem.nodeId }}" src="{{ elem.attrs.src }}" controls="true"></audio>
 	</template>
 
 	<!-- 换行 -->
@@ -155,6 +155,7 @@ export default class WepyHTML extends wepy.component {
 		if (Array.isArray(content)) {
 			content = content.slice();
 		} else if (typeof content === 'string' && content) {
+			content = content.replace(/\s/g, ' ').replace(/&nbsp;/g, ' ');
 			content = parseHTML(content, new Document({
 				onNodeCreate: (name, attrs) => {
 					if (options.onNodeCreate) {
@@ -163,7 +164,6 @@ export default class WepyHTML extends wepy.component {
 				}
 			})).nodes();
 		}
-
 		this.content = content || [];
 		this.$apply();
 	}
@@ -173,12 +173,8 @@ export default class WepyHTML extends wepy.component {
 		videoTap(e) {
 			const nodeId = e.currentTarget.dataset.nodeid;
 			const context = wepy.createVideoContext('wepyhtml-video-' + nodeId);
+			context.requestFullScreen();
 			context.play();
-			// 在安卓微信下，如果视频不可见，则调用play()也无法播放
-			// 需要再调用全屏方法
-			if (wepy.getSystemInfoSync().platform === 'android') {
-				context.requestFullScreen();
-			}
 		},
 		// 视频层级较高，为防止遮挡其他特殊定位元素，造成界面异常，
 		// 强制全屏播放
