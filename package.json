@@ -29,9 +29,9 @@
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-copy": "^1.1.0",
+    "gulp-copy": "^4.0.1",
     "natives": "^1.1.6"
   }
 }
